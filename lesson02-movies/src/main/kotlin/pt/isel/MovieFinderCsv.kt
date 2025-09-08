@@ -1,6 +1,8 @@
 package pt.isel
 
-class MovieFinderCsv(private val client: DataSourceClient) : MovieFinder {
+class MovieFinderCsv : MovieFinder {
+    lateinit var client: DataSourceClient
+
     /**
      * IoC => Inversion of Control:
      * * This class does NOT instantiate its dependencies
