@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
 repositories {
