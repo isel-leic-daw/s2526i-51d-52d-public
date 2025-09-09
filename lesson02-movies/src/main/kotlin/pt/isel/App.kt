@@ -10,7 +10,7 @@ fun resolveDependenciesManuallyByPropertyInjection() {
     lister.finder = finder
     finder.client = DataSourceClientViaUrl()
     lister
-        .moviesDirectedBy("kubrick")
+        .moviesDirectedBy("nolan")
         .take(5)
         .forEach { println(it) }
 }

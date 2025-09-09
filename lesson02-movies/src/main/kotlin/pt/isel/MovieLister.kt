@@ -15,6 +15,8 @@ class MovieLister {
 
     fun moviesDirectedBy(arg: String): Sequence<Movie> {
         check(finder != null) { "MovieLister requires an instance of MovieFinder!" }
-        return finder.findAll(TOP_100_MOVIES).filter { it.director.lowercase().contains(arg.lowercase()) }
+        return finder
+            .findAll(TOP_100_MOVIES)
+            .filter { it.director.lowercase().contains(arg.lowercase()) }
     }
 }
