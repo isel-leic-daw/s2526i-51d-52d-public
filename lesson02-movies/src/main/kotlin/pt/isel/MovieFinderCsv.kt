@@ -1,7 +1,7 @@
 package pt.isel
 
-class MovieFinderCsv : MovieFinder {
-    lateinit var client: DataSourceClient
+class MovieFinderCsv(val client: DataSourceClient) : MovieFinder {
+    // lateinit var client: DataSourceClient
 
     /**
      * IoC => Inversion of Control:
