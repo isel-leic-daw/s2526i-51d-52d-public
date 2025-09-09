@@ -8,6 +8,7 @@ fun main() {
             MovieLister::class.java,
             MovieFinderCsv::class.java,
             DataSourceClientViaFile::class.java,
+            // DataSourceClientViaUrl::class.java,
         )
     val lister = context.getBean(MovieLister::class.java)
     println(lister)
