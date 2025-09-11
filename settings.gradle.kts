@@ -6,4 +6,4 @@ plugins {
 rootProject.name = "daw2025"
 include("lesson01-intro-DAW")
 include("lesson02-movies")
-include("lesson02-spring-context")
+include("lesson03-spring-context")
