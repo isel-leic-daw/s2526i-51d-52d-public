@@ -61,5 +61,3 @@ This guide ensures all the tools required for the first part of the course are i
 - If you see:
   `postgres=#`
   then you're successfully connected.
-
-Let me know if you'd like this saved as a file or styled for a specific platform like GitHub or Notion!
