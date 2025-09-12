@@ -8,6 +8,7 @@ repositories {
 }
 
 dependencies {
+    // The movies domain
     implementation(project(":lesson02-movies"))
 
     implementation("org.springframework:spring-context:6.1.12")
