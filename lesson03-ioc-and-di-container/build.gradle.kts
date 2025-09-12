@@ -8,13 +8,8 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":lesson02-movies"))
-
-    implementation("org.springframework:spring-context:6.1.12")
-
-    implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("org.slf4j:slf4j-simple:2.0.16")
-
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("jakarta.inject:jakarta.inject-api:2.0.1")
     testImplementation(kotlin("test"))
 }
 
