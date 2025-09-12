@@ -1,5 +1,8 @@
 package pt.isel
 
+import jakarta.inject.Named
+
+@Named
 class MovieFinderCsv(val client: DataSourceClient) : MovieFinder {
     // lateinit var client: DataSourceClient
 

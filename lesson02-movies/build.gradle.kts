@@ -8,6 +8,7 @@ repositories {
 }
 
 dependencies {
+    implementation("jakarta.inject:jakarta.inject-api:2.0.1")
     testImplementation(kotlin("test"))
 }
 
