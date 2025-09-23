@@ -20,9 +20,9 @@ class InterceptorLogger : HandlerInterceptor {
             val controllerName = handler.beanType.simpleName
             val methodName = handler.method.name
 
-            logger.info("Handling request with controller=$controllerName, method=$methodName")
+            val url = request.requestURL
+            logger.info("Handling request to $url with controller=$controllerName, method=$methodName")
         }
-
         return super.preHandle(request, response, handler)
     }
 }

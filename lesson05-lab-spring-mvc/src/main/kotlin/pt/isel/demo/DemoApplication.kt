@@ -12,10 +12,12 @@ class DemoApplication
 @Configuration
 class DemoConfig(
     private val intLogger: InterceptorLogger,
+    private val durLogger: InterceptorLogDuration
 ) : WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
         super.addInterceptors(registry)
         registry.addInterceptor(intLogger)
+        registry.addInterceptor(durLogger)
     }
 }
 
