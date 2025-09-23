@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
 
+const val HANDLER_INFO_KEY = "handlerInfo"
+
 @Component
 class InterceptorLogger : HandlerInterceptor {
     private val logger = LoggerFactory.getLogger(InterceptorLogger::class.java)
@@ -21,7 +23,8 @@ class InterceptorLogger : HandlerInterceptor {
             val methodName = handler.method.name
 
             val url = request.requestURL
-            logger.info("Handling request to $url with controller=$controllerName, method=$methodName")
+            // logger.info("Handling request to $url with controller=$controllerName, method=$methodName")
+            request.setAttribute(HANDLER_INFO_KEY, "controller=$controllerName method=$methodName")
         }
         return super.preHandle(request, response, handler)
     }

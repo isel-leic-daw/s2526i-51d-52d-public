@@ -1,0 +1,35 @@
+package pt.isel.demo
+
+import jakarta.servlet.FilterChain
+import jakarta.servlet.http.HttpFilter
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+
+@Component
+class FilterLogDuration : HttpFilter() {
+    override fun doFilter(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        chain: FilterChain,
+    ) {
+        // Performed before the request is handled by the servlet
+        val start = System.nanoTime()
+        log.info("doFilter: before chain call")
+
+        // Call the rest of the pipeline
+        // QUESTION what happens if a filter does not call chain.doFilter?
+        chain.doFilter(request, response)
+
+        // Performed after the request was handled by the servlet
+        val end = System.nanoTime()
+        val delta = (end - start) / 1000
+        log.info("doFilter: after chain call, took: {} us on {}", delta, request.getAttribute(HANDLER_INFO_KEY))
+    }
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(FilterLogDuration::class.java)
+    }
+}
