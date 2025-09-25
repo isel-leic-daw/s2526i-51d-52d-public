@@ -1,11 +1,13 @@
 package pt.isel
 
-import jakarta.servlet.http.HttpServletRequest
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Size
-import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 // See https://beanvalidation.org for the Length and Min annotations.
@@ -58,7 +60,5 @@ class ControllerArgParser {
      * and checkClientIpArgResolver
      */
     @GetMapping("/path3")
-    fun handler3(
-        ip: ClientIp,
-    ): String = "Request from ${ip.ipAddress}"
+    fun handler3(ip: ClientIp): String = "Request from ${ip.ipAddress}"
 }

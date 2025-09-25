@@ -11,7 +11,7 @@ class App
 
 @Configuration
 class AppConfig(
-    //val convUriToQrCode: MsgConverterUrlToQrCode,
+    // val convUriToQrCode: MsgConverterUrlToQrCode,
     val clientIpArgumentResolver: ClientIpArgumentResolver,
 ) : WebMvcConfigurer {
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
