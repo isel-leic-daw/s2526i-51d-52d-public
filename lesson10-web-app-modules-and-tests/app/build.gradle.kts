@@ -23,6 +23,9 @@ dependencies {
     // To get password encode
     api("org.springframework.security:spring-security-core:6.5.5")
 
+    // To use WebTestClient in integration tests with real HTTP server
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")

@@ -6,9 +6,6 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
-group = "pt.isel"
-version = "unspecified"
-
 repositories {
     mavenCentral()
 }

@@ -6,9 +6,6 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "12.1.1"
 }
 
-group = "pt.isel"
-version = "unspecified"
-
 repositories {
     mavenCentral()
 }
@@ -20,12 +17,10 @@ dependencies {
     implementation("org.springframework:spring-webmvc:6.2.11")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    // To use Servlet API
-    implementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
+    // To mock services
+    testImplementation("io.mockk:mockk:1.14.3")
 
-    // To get password encode
-    api("org.springframework.security:spring-security-core:6.5.5")
-
+    testImplementation("org.springframework:spring-test:6.2.11")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
