@@ -13,3 +13,10 @@ include("lesson05-lab-spring-mvc")
 include("lesson07-servlet-api")
 include("lesson08-spring-web-pipeline")
 include("lesson09-spring-and-auth")
+
+// nested modules under `lesson10-web-app-modules-and-tests`
+include("lesson10-web-app-modules-and-tests:app")
+include("lesson10-web-app-modules-and-tests:domain")
+include("lesson10-web-app-modules-and-tests:http")
+include("lesson10-web-app-modules-and-tests:service")
+include("lesson10-web-app-modules-and-tests:repo")
