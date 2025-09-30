@@ -20,7 +20,7 @@ dependencies {
     implementation("jakarta.inject:jakarta.inject-api:2.0.1")
 
     // To get password encode
-    api("org.springframework.security:spring-security-core:6.5.5")
+    implementation("org.springframework.security:spring-security-core:6.5.5")
 
     testImplementation("org.springframework:spring-test:6.2.11")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

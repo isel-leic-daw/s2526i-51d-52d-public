@@ -67,7 +67,11 @@ class TestUserAuthService {
 
     @Test
     fun `createUser stores user and encodes password`() {
-        val user = service.createUser("Alice", "alice@isel.pt", "password123")
+        val user =
+            service.createUser("Alice", "alice@isel.pt", "password123").let {
+                check(it is Success)
+                it.value
+            }
         assertEquals("Alice", user.name)
         assertEquals("alice@isel.pt", user.email)
         assertTrue(passwordEncoder.matches("password123", user.passwordValidation.validationInfo))
@@ -83,8 +87,12 @@ class TestUserAuthService {
 
     @Test
     fun `getUserByToken returns user for valid token`() {
-        val user = service.createUser("Carol", "carol@isel.pt", "pass")
-        val tokenInfo = service.createToken("carol@isel.pt", "pass")
+        val user =
+            service.createUser("Carol", "carol@isel.pt", "pass123").let {
+                check(it is Success)
+                it.value
+            }
+        val tokenInfo = service.createToken("carol@isel.pt", "pass123")
         val found = service.getUserByToken(tokenInfo.tokenValue)
         assertNotNull(found)
         assertEquals(user.id, found.id)
@@ -92,8 +100,8 @@ class TestUserAuthService {
 
     @Test
     fun `revokeToken removes token`() {
-        service.createUser("Dave", "dave@isel.pt", "pw")
-        val tokenInfo = service.createToken("dave@isel.pt", "pw")
+        service.createUser("Dave", "dave@isel.pt", "pw123")
+        val tokenInfo = service.createToken("dave@isel.pt", "pw123")
         val revoked = service.revokeToken(tokenInfo.tokenValue)
         assertTrue(revoked)
         val found = service.getUserByToken(tokenInfo.tokenValue)
