@@ -6,10 +6,9 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import pt.isel.domain.Sha256TokenEncoder
-import pt.isel.domain.TokenEncoder
-import pt.isel.domain.TokenValidationInfo
 import pt.isel.domain.UsersDomainConfig
 import pt.isel.repo.mem.RepositoryUserInMem
 import java.time.Clock
@@ -51,19 +50,8 @@ class TestUserAuthService {
     @Autowired
     private lateinit var service: UserAuthService
 
-    private val config =
-        UsersDomainConfig(
-            maxTokensPerUser = 3,
-            tokenSizeInBytes = 16,
-            tokenTtl = Duration.ofHours(1),
-            tokenRollingTtl = Duration.ofMinutes(30),
-        )
-    private val passwordEncoder = BCryptPasswordEncoder()
-    private val tokenEncoder =
-        object : TokenEncoder {
-            override fun createValidationInformation(token: String): TokenValidationInfo = TokenValidationInfo(token)
-        }
-    private val clock = Clock.systemUTC()
+    @Autowired
+    private lateinit var passwordEncoder: PasswordEncoder
 
     @Test
     fun `createUser stores user and encodes password`() {
