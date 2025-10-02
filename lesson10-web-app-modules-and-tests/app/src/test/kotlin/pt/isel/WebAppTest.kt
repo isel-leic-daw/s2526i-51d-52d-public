@@ -1,7 +1,9 @@
 package pt.isel
 
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.junit.jupiter.api.TestInstance
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.web.server.LocalServerPort
@@ -10,8 +12,10 @@ import org.springframework.context.annotation.Primary
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import pt.isel.app.WebApp
+import pt.isel.domain.PasswordValidationInfo
 import pt.isel.http.model.UserCreateTokenOutputModel
 import pt.isel.http.model.UserInput
+import pt.isel.repo.RepositoryUser
 import java.time.Clock
 import java.time.ZoneId
 import kotlin.test.assertTrue
@@ -30,11 +34,31 @@ class WebAppTestConfig {
     classes = [WebApp::class, WebAppTestConfig::class],
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
 )
-@AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WebAppTest {
+    @Autowired
+    lateinit var repoUsers: RepositoryUser
+
     // Injected by the test environment
     @LocalServerPort
     var port: Int = 0
+
+    val johnDoe =
+        UserInput(
+            name = "John Doe",
+            email = "john.doe@example.com",
+            password = "password",
+        )
+
+    @BeforeAll
+    fun setup() {
+        repoUsers.clear()
+        repoUsers.createUser(
+            johnDoe.name,
+            johnDoe.email,
+            PasswordValidationInfo("doe12345"),
+        )
+    }
 
     @Test
     fun `can create an user, obtain a token, and access user home, and logout`() {
@@ -158,6 +182,22 @@ class WebAppTest {
 
     @Test
     fun `should return 409 when email is already in use`() {
-        // TODO
+        // given: an HTTP client
+        val client = WebTestClient.bindToServer().baseUrl("http://localhost:$port/api").build()
+
+        // Perform the request and assert the results
+        client
+            .post()
+            .uri("/users")
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(johnDoe)
+            .exchange()
+            .expectStatus()
+            .isEqualTo(409)
+            .expectHeader()
+            .contentType(MediaType.APPLICATION_PROBLEM_JSON)
+            .expectBody()
+            .jsonPath("title")
+            .isEqualTo("email-already-in-use")
     }
 }

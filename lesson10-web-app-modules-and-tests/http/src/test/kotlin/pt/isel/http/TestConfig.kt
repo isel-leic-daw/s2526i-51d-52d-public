@@ -15,6 +15,7 @@ import pt.isel.domain.User
 import pt.isel.domain.UsersDomainConfig
 import pt.isel.repo.RepositoryUser
 import pt.isel.service.UserAuthService
+import pt.isel.service.success
 import java.time.Clock
 import kotlin.math.abs
 import kotlin.random.Random
@@ -46,12 +47,14 @@ class TestConfig {
 
         // Emulate createUser behaviour
         every { mock.createUser(any(), any(), any()) } answers {
-            User(
-                id = ++userId,
-                name = firstArg(),
-                email = secondArg(),
-                passwordValidation = PasswordValidationInfo(thirdArg()),
-            ).also { users[it.id] = it }
+            success(
+                User(
+                    id = ++userId,
+                    name = firstArg(),
+                    email = secondArg(),
+                    passwordValidation = PasswordValidationInfo(thirdArg()),
+                ).also { users[it.id] = it },
+            )
         }
 
         // Emulate createToken behaviour

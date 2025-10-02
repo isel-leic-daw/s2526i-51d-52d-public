@@ -7,11 +7,17 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import pt.isel.domain.AuthenticatedUser
+import pt.isel.domain.User
+import pt.isel.http.model.Problem
 import pt.isel.http.model.UserCreateTokenInputModel
 import pt.isel.http.model.UserCreateTokenOutputModel
 import pt.isel.http.model.UserHomeOutputModel
 import pt.isel.http.model.UserInput
+import pt.isel.service.Either
+import pt.isel.service.Failure
+import pt.isel.service.Success
 import pt.isel.service.UserAuthService
+import pt.isel.service.UserError
 
 @RestController
 class UserController(
@@ -31,16 +37,32 @@ class UserController(
     fun createUser(
         @RequestBody userInput: UserInput,
     ): ResponseEntity<*> {
-        val user =
+        val result: Either<UserError, User> =
             userService
                 .createUser(userInput.name, userInput.email, userInput.password)
 
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .header(
-                "Location",
-                "/api/users/${user.id}",
-            ).build<Unit>()
+        return when (result) {
+            is Success ->
+                ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .header(
+                        "Location",
+                        "/api/users/${result.value.id}",
+                    ).build<Unit>()
+
+            is Failure ->
+                when (result.value) {
+                    is UserError.AlreadyUsedEmailAddress ->
+                        Problem.EmailAlreadyInUse.response(
+                            HttpStatus.BAD_REQUEST,
+                        )
+
+                    UserError.InsecurePassword ->
+                        Problem.InsecurePassword.response(
+                            HttpStatus.BAD_REQUEST,
+                        )
+                }
+        }
     }
 
     /**

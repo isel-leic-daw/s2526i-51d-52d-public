@@ -16,6 +16,16 @@ import java.time.Instant
 import java.util.Base64.getUrlDecoder
 import java.util.Base64.getUrlEncoder
 
+sealed class UserError {
+    data object AlreadyUsedEmailAddress : UserError()
+
+    data object InsecurePassword : UserError()
+}
+
+sealed class TokenCreationError {
+    data object UserOrPasswordAreInvalid : TokenCreationError()
+}
+
 @Named
 class UserAuthService(
     private val passwordEncoder: PasswordEncoder,
@@ -37,6 +47,9 @@ class UserAuthService(
             validationInfo = passwordEncoder.encode(password),
         )
 
+    // TODO it could be better
+    fun isSafePassword(password: String) = password.length > 4
+
     /**
      * Still missing validation if given email already exists.
      */
@@ -44,9 +57,15 @@ class UserAuthService(
         name: String,
         email: String,
         password: String,
-    ): User {
+    ): Either<UserError, User> {
+        if (!isSafePassword(password)) {
+            return failure(UserError.InsecurePassword)
+        }
+        if (repoUsers.findByEmail(email) != null) {
+            return failure(UserError.AlreadyUsedEmailAddress)
+        }
         val passwordValidationInfo = createPasswordValidationInformation(password)
-        return repoUsers.createUser(name, email, passwordValidationInfo)
+        return success(repoUsers.createUser(name, email, passwordValidationInfo))
     }
 
     fun createToken(
