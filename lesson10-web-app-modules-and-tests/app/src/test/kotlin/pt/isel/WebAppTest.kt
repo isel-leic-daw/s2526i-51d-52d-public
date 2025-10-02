@@ -193,7 +193,7 @@ class WebAppTest {
             .bodyValue(johnDoe)
             .exchange()
             .expectStatus()
-            .isEqualTo(409)
+            .isEqualTo(400)
             .expectHeader()
             .contentType(MediaType.APPLICATION_PROBLEM_JSON)
             .expectBody()
