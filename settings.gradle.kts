@@ -25,3 +25,5 @@ include("lesson12-agenda-domain")
 include("lesson12-agenda-http")
 include("lesson12-agenda-service")
 include("lesson12-agenda-repository")
+
+include("lesson13-agenda-repository-jdbi")
