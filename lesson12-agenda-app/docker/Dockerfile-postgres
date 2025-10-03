@@ -1,0 +1,18 @@
+# Use the official PostgreSQL image as a base
+FROM postgres
+
+# Set the user working directory inside the container
+USER postgres
+WORKDIR /app
+
+# Copy the schema and test data scripts into the PostgreSQL initialization directory
+# These scripts will run automatically when the container starts for the first time
+COPY src/sql/create-schema.sql /docker-entrypoint-initdb.d/1_create.sql
+COPY src/sql/insert-test-data.sql /docker-entrypoint-initdb.d/2_insert-test-data.sql
+
+# Copy the wait-for-postgres script and ensure it's executable
+COPY --chown=postgres:postgres ./docker/scripts/wait-for-postgres.sh ./bin/wait-for-postgres.sh
+RUN chmod +x ./bin/wait-for-postgres.sh
+
+# Expose PostgreSQL port to the host, to access the container’s services outside.
+EXPOSE 5432

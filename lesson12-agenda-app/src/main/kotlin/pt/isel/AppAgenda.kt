@@ -1,5 +1,7 @@
 package pt.isel
 
+import org.jdbi.v3.core.Jdbi
+import org.postgresql.ds.PGSimpleDataSource
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -10,7 +12,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import pt.isel.http.AuthenticatedUserArgumentResolver
 import pt.isel.http.AuthenticationInterceptor
-import pt.isel.repo.mem.TransactionManagerInMem
+import pt.isel.repo.jdbi.TransactionManagerJdbi
+import pt.isel.repo.jdbi.configureWithAppRequirements
 import java.time.Clock
 import java.time.Duration
 
@@ -31,7 +34,16 @@ class PipelineConfigurer(
 @SpringBootApplication
 class AppAgenda {
     @Bean
-    fun trxManager() = TransactionManagerInMem()
+    fun jdbi() =
+        Jdbi
+            .create(
+                PGSimpleDataSource().apply {
+                    setURL(Environment.getDbUrl())
+                },
+            ).configureWithAppRequirements()
+
+    @Bean
+    fun trxManagerJdbi(jdbi: Jdbi): TransactionManagerJdbi = TransactionManagerJdbi(jdbi)
 
     @Bean
     fun passwordEncoder() = BCryptPasswordEncoder()
