@@ -78,7 +78,7 @@ class UserAuthService(
         password: String,
     ): Either<TokenCreationError, TokenExternalInfo> {
         if (email.isBlank() || password.isBlank()) {
-            failure(TokenCreationError.UserOrPasswordAreInvalid)
+            return failure(TokenCreationError.UserOrPasswordAreInvalid)
         }
         return trxManager.run {
             val user: User =
