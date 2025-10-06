@@ -2,15 +2,12 @@ package pt.isel.repo.jdbi
 
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.kotlin.mapTo
-import org.jdbi.v3.core.mapper.RowMapper
-import org.jdbi.v3.core.statement.StatementContext
 import org.slf4j.LoggerFactory
 import pt.isel.PasswordValidationInfo
 import pt.isel.Token
 import pt.isel.TokenValidationInfo
 import pt.isel.User
 import pt.isel.repo.RepositoryUser
-import java.sql.ResultSet
 import java.time.Instant
 
 class RepositoryUserJdbi(
@@ -20,14 +17,14 @@ class RepositoryUserJdbi(
         handle
             .createQuery("SELECT * FROM dbo.users WHERE id = :id")
             .bind("id", id)
-            .map(UserMapper())
+            .mapTo<User>()
             .findOne()
             .orElse(null)
 
     override fun findAll(): List<User> =
         handle
             .createQuery("SELECT * FROM dbo.users")
-            .map(UserMapper())
+            .mapTo<User>()
             .list()
 
     override fun save(entity: User) {
@@ -38,9 +35,7 @@ class RepositoryUserJdbi(
             SET name = :name, email = :email 
             WHERE id = :id
             """,
-            ).bind("name", entity.name)
-            .bind("email", entity.email)
-            .bind("id", entity.id)
+            ).bindBean(entity)
             .execute()
     }
 
@@ -83,7 +78,7 @@ class RepositoryUserJdbi(
         handle
             .createQuery("SELECT * FROM dbo.users WHERE email = :email")
             .bind("email", email)
-            .map(UserMapper())
+            .mapTo<User>()
             .findOne()
             .orElse(null)
 
@@ -162,20 +157,6 @@ class RepositoryUserJdbi(
             """,
             ).bind("validation_information", tokenValidationInfo.validationInfo)
             .execute()
-
-    // Mapper for User
-    private class UserMapper : RowMapper<User> {
-        override fun map(
-            rs: ResultSet,
-            ctx: StatementContext,
-        ): User =
-            User(
-                id = rs.getInt("id"),
-                name = rs.getString("name"),
-                email = rs.getString("email"),
-                passwordValidation = PasswordValidationInfo(rs.getString("password_validation")),
-            )
-    }
 
     private data class UserAndTokenModel(
         val id: Int,
