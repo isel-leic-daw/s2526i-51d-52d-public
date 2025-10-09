@@ -27,3 +27,4 @@ include("lesson12-agenda-service")
 include("lesson12-agenda-repository")
 
 include("lesson13-agenda-repository-jdbi")
+include("lesson15-sse-with-spring")
