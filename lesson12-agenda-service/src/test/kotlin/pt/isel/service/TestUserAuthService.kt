@@ -1,12 +1,12 @@
 package pt.isel.service
 
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertInstanceOf
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import java.time.Instant
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -78,16 +78,16 @@ class TestUserAuthService {
     fun `createToken throws for invalid password`() {
         service.createUser("Eve", "eve@isel.pt", "pw1")
         service.createToken("eve@isel.pt", "wrongpw").also {
-            assertInstanceOf<Either.Left<*>>(it)
-            assertInstanceOf<TokenCreationError.UserOrPasswordAreInvalid>(it.value)
+            assertIs<Either.Left<*>>(it)
+            assertIs<TokenCreationError.UserOrPasswordAreInvalid>(it.value)
         }
     }
 
     @Test
     fun `createToken throws for non-existent email`() {
         service.createToken("notfound@isel.pt", "pw").also {
-            assertInstanceOf<Either.Left<*>>(it)
-            assertInstanceOf<TokenCreationError.UserOrPasswordAreInvalid>(it.value)
+            assertIs<Either.Left<*>>(it)
+            assertIs<TokenCreationError.UserOrPasswordAreInvalid>(it.value)
         }
     }
 

@@ -18,7 +18,6 @@ dependencies {
     implementation(project(":lesson13-agenda-repository-jdbi"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // for JDBI and Postgres
