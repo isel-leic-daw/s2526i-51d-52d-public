@@ -104,3 +104,32 @@ console.log(add(1,2))
 ** Open the browser in `http://localhost:3000`
 *** Observe the network requests made by the browser.
 * Explain what running `npx vite` adds in comparison with just serving the static files with `serve .`
+
+== VITE and dependencies
+
+* Instal lodash dependency with `npm install lodash`.
+* Add to index.html a script `demo.js` that imports `lodash` and uses it to perform some operation e.g.:
+----
+import _ from 'lodash'
+
+// Define some functions to use in composition
+const add = (a, b) => a + b;
+const square = (x) => x * x;
+
+// Compose functions together
+const addAndSquare = _.flow([add, square]);
+
+const result = addAndSquare(2, 3);
+console.log(result) // Output: 25 (because (2 + 3) ^ 2 = 25)
+----
+** Start VITE in development mode with `npx vite` and open the browser in `http://localhost:5173`.
+*** Observe the network requests made by the browser.
+*** Is there a request for `lodash`?
+** Run `npx vite build` to produce a production build of the application.
+*** Observe the content of the `dist` folder created by VITE.
+*** Is there a file for `lodash`?
+*** Serve the content of the `dist` folder with `serve dist`.
+*** Open the browser in `http://localhost:3000`
+**** Observe the network requests made by the browser.
+**** Is there a request for `lodash`?
+** Explain how VITE is able to provide `lodash` to the application without having a specific request for it in the HTML file.
