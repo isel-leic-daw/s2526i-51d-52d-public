@@ -62,10 +62,12 @@ if(typeof numberOrString === "string") {
 }
 
 // = object types
-const alice: {name: string, nbr: number} = {
+const alice: {readonly name: string, readonly nbr: number} = {
   name: "Alice",
   nbr: 12345,
 }
+
+// ERROR alice.name = "John"
 
 // = type definitions
 type Student = {name: string, nbr: number, course: string}
@@ -75,14 +77,10 @@ const bob: Student = {
   course: "LEIC"
 }
 
-// Unions
-type StringOrNumber = string | number
-const someConst: StringOrNumber = "hello"
-
 // = Structural Type System vs Nominal Type System
-
+// type Student = {name: string, nbr: number, course: string} // Defined Above
 type Undergraduate = {name: string, nbr: number}
-const carol = {
+const carol = { // has NO named type
   name: "Carol",
   nbr: 34566,
   course: "MEIC"
