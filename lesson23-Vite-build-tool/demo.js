@@ -8,4 +8,4 @@ const square = (x) => x * x;
 const addAndSquare = _.flow([add, square]);
 
 const result = addAndSquare(2, 3);
-console.log(result) // Output: 25 (because (2 + 3) ^ 2 = 25)
+console.log("addAndSquare(2, 3) <=> (2 + 3) ^ 2 = " + result) // Output: 25 (because (2 + 3) ^ 2 = 25)

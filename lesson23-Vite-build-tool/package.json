@@ -7,6 +7,7 @@
   },
   "author": "",
   "license": "ISC",
+  "type": "module",
   "description": "",
   "devDependencies": {
     "vite": "^6.4.1"
