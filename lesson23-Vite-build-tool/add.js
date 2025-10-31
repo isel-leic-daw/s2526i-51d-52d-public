@@ -10,4 +10,5 @@ console.log(pIsel) // output: null => pq?
 const label = "File add v2"
 
 write(label, "11 + 13 = " + add(11,13))
+write(label, "11 + 'isel' = " + add(11,'isel'))
 write(label, "7 + 5 = " + add(7,5))

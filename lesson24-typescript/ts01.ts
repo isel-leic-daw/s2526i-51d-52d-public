@@ -42,6 +42,8 @@ isOdd = function(input) {
   return input % 2 == 1
 }
 
+// ERROR isOdd = (n) => n + "ola"
+
 // = union types
 let numberOrString: number | string
 numberOrString = "hello"
@@ -81,14 +83,16 @@ const someConst: StringOrNumber = "hello"
 
 // = Structural Type System vs Nominal Type System
 
+// type Student = {name: string, nbr: number, course: string} // defined above
 type Undergraduate = {name: string, nbr: number}
-const carol = {
+const carol = { // carol has an ANONYMOUS type
   name: "Carol",
   nbr: 34566,
   course: "MEIC"
 }
-const mary: Undergraduate = carol
+let mary: Undergraduate = carol
 const katy: Student = carol
+mary = katy
 // ERROR const rose: Student = mary
 
 type Teacher = {
