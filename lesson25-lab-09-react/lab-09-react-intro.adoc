@@ -194,8 +194,8 @@ export function createMutationObserver() {
 ----
 This function will allow us to observe mutations to the DOM.
 
-* Replace the call to `root.render` with the following code
-    ** Do not forget to import `createMutationObserver`.
+* Create a new `main2.txs` with the following code
+    ** Do not forget to import `createMutationObserver` and initialize the `root` variable.
 
 [source, typescript]
 ----
