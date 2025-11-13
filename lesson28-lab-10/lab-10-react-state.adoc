@@ -6,7 +6,7 @@ This document contains a set of exercises about React state management.
 
 == `Counter` component
 
-Create a `Counter` component with the following _props_ type in a file `counter.js`.
+Create a `Counter` component with the following _props_ type in a file `Counter.tsx`.
 [source, typescript]
 ----
 type CounterProps = {
@@ -31,7 +31,7 @@ image::lab-10-counter-usage.png[Counter Usage,width=150]
 
 == `InputBox` component
 
-Create an `InputBox` component with the following _props_ type.
+Create an `InputBox` component with the following _props_ type in a file `InputBox.tsx`.
 [source, typescript]
 ----
 type InputBoxProps = {
