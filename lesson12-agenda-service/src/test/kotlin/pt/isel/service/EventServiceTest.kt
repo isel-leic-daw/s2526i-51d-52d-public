@@ -43,7 +43,7 @@ class EventServiceTest {
             serviceEvent
                 .createEvent("Meeting", null, organizer.value.id, SelectionType.MULTIPLE)
                 .let { it as Success<Event> }
-        val ts = serviceEvent.createFreeTimeSlot(ev.value.id, LocalDateTime.now(), 60)
+        val ts = serviceEvent.createFreeTimeSlot(ev.value.id, organizer.value.id, LocalDateTime.now(), 60)
         assertIs<Success<TimeSlot>>(ts)
         val timeSlotId = ts.value.id
 
@@ -67,13 +67,13 @@ class EventServiceTest {
                     check(it is Success)
                     it.value
                 }
-
+        assertIs<User>(organizer)
         val ts =
             serviceEvent
                 .createEvent("Meeting", null, organizer.id, SelectionType.SINGLE)
                 .let {
                     check(it is Success)
-                    serviceEvent.createFreeTimeSlot(it.value.id, LocalDateTime.now(), 60)
+                    serviceEvent.createFreeTimeSlot(it.value.id, organizer.id, LocalDateTime.now(), 60)
                 }
         assertIs<Success<TimeSlot>>(ts)
 
@@ -97,23 +97,25 @@ class EventServiceTest {
 
     @Test
     fun `addParticipantToTimeSlot should return UserNotFound when participant is not found`() {
-        val ts =
+        val participant =
             serviceUser
                 .createUser("Organizer", "organizer@example.com", "camafeuAtleta")
                 .let {
                     check(it is Success)
                     it.value
-                }.let { participant ->
-                    serviceEvent.createEvent(
-                        "Meeting",
-                        null,
-                        participant.id,
-                        SelectionType.MULTIPLE,
-                    )
-                }.let {
+                }
+
+        val ts =
+            serviceEvent
+                .createEvent(
+                    "Meeting",
+                    null,
+                    participant.id,
+                    SelectionType.MULTIPLE,
+                ).let {
                     check(it is Success)
                     it.value
-                }.let { event -> serviceEvent.createFreeTimeSlot(event.id, LocalDateTime.now(), 60) }
+                }.let { event -> serviceEvent.createFreeTimeSlot(event.id, participant.id, LocalDateTime.now(), 60) }
         assertIs<Success<TimeSlot>>(ts)
 
         // Try to add unknown participant
@@ -167,7 +169,7 @@ class EventServiceTest {
                     it.value.id
                 }
 
-        val result = serviceEvent.createFreeTimeSlot(eventId, startTime, durationInMinutes)
+        val result = serviceEvent.createFreeTimeSlot(eventId, organizer.id, startTime, durationInMinutes)
         assertTrue(result is Success)
 
         val event =
@@ -198,7 +200,7 @@ class EventServiceTest {
                     it.value.id
                 }
 
-        val result = serviceEvent.createFreeTimeSlot(eventId, startTime, durationInMinutes)
+        val result = serviceEvent.createFreeTimeSlot(eventId, organizer.id, startTime, durationInMinutes)
         assertTrue(result is Success)
 
         val event =
@@ -216,7 +218,7 @@ class EventServiceTest {
         val startTime = LocalDateTime.now()
         val durationInMinutes = 60
 
-        val result = serviceEvent.createFreeTimeSlot(eventId, startTime, durationInMinutes)
+        val result = serviceEvent.createFreeTimeSlot(eventId, 0, startTime, durationInMinutes)
 
         assertTrue(result is Failure)
         assertEquals(result.value, EventError.EventNotFound)
