@@ -5,6 +5,7 @@ services:
     image: agenda-ubuntu
     tty: true
 
+  # Once on Exec run: psql -U dbuser -d db
   agenda-postgres:
     container_name: agenda-postgres
     image: agenda-postgres

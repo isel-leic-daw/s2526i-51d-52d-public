@@ -52,10 +52,27 @@ class TimeSlotControllerTest {
         check(event is Success)
         val timeSlotInput = TimeSlotInput(LocalDateTime.now(), 60)
 
+        val guestToken =
+            webTestClient
+                .post()
+                .uri("/api/users/token")
+                .bodyValue(
+                    mapOf(
+                        "email" to organizer.value.email,
+                        "password" to "camafeuAtleta",
+                    ),
+                ).exchange()
+                .expectStatus()
+                .isOk
+                .expectBody(UserCreateTokenOutputModel::class.java)
+                .returnResult()
+                .responseBody!!
+
         // Act & Assert
         webTestClient
             .post()
             .uri("/api/events/${event.value.id}/timeslots")
+            .header("Authorization", "Bearer ${guestToken.token}")
             .bodyValue(timeSlotInput)
             .exchange()
             .expectStatus()
@@ -83,7 +100,7 @@ class TimeSlotControllerTest {
         check(guest is Success)
         val event = eventService.createEvent("Workshop", "Tech workshop", organizer.value.id, SelectionType.SINGLE)
         check(event is Success)
-        val timeSlot = eventService.createFreeTimeSlot(event.value.id, LocalDateTime.now(), 120)
+        val timeSlot = eventService.createFreeTimeSlot(event.value.id, organizer.value.id, LocalDateTime.now(), 120)
         check(timeSlot is Success)
 
         val guestToken =
@@ -132,7 +149,7 @@ class TimeSlotControllerTest {
         // Create a timeslot on Event and allocate it to guest 1
         val timeSlot =
             eventService
-                .createFreeTimeSlot(event.value.id, LocalDateTime.now(), 90)
+                .createFreeTimeSlot(event.value.id, organizer.value.id, LocalDateTime.now(), 90)
                 .let { it as Success }
                 .let { eventService.addParticipantToTimeSlot(it.value.id, guest1.value.id) }
         check(timeSlot is Success)
