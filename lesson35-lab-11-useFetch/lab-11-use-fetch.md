@@ -1,7 +1,7 @@
 ### 1. `useEffect`
 
 Implement a custom React Hook named **`useFetch`**, using **`useReducer`** and
-**`useEffect`**, **without** using `AbortController`.
+**`useEffect`**.
 
 ---
 
@@ -14,9 +14,7 @@ whenever the given URL changes. The hook must:
 * Use **`useEffect`** to trigger the fetch.
 * Enforce valid state transitions inside the reducer.
 
-Your hook must also:
-* Cancel the current fetch using AbortController when necessary.
-* Avoid state updates when the effect is cancelled
+Your hook must also **avoid state updates when the effect is cancelled**.
 
 ### 📌 **Requirements**
 
