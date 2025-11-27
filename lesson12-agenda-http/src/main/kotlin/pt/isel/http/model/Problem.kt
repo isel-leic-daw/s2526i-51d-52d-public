@@ -34,6 +34,13 @@ sealed class Problem(
     data object UserIsAlreadyParticipantInTimeSlot :
         Problem(URI("$PROBLEM_URI_PATH/user-is-already-participant-in-time-slot"))
 
+    data object TimeSlotSingleHasNotMultipleParticipants :
+        Problem(URI("$PROBLEM_URI_PATH/timeslot-single-has-not-multiple-participants"))
+
+    data object UserIsNotOrganizer : Problem(URI("$PROBLEM_URI_PATH/user-is-not-organizer"))
+
+    data object UserIsNotParticipantInTimeSlot : Problem(URI("$PROBLEM_URI_PATH/user-is-not-participant-in-time-slot"))
+
     data object InsecurePassword : Problem(URI("$PROBLEM_URI_PATH/insecure-password"))
 
     data object UserOrPasswordAreInvalid : Problem(URI("$PROBLEM_URI_PATH/user-or-password-are-invalid"))
