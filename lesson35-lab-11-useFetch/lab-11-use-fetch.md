@@ -39,10 +39,6 @@ type Action =
 
 ## 2. PeriodicFetcher
 
-CHere is the corrected and polished version:
-
----
-
 Create a React component that receives a URL and a time period (in milliseconds).
 This component must use the previously implemented `useFetch` hook.
 
