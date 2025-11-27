@@ -104,9 +104,10 @@ class RepositoryParticipantJdbi(
         handle
             .createQuery(
                 """
-            SELECT p.*, 
-                u.id AS user_id, u.name, u.email, 
-                ts.*, e.* FROM dbo.participants p
+            SELECT p.id, u.id as user_id, u.name, u.email, u.password_validation,
+                   ts.id as time_slot_id, ts.start_time, ts.duration_in_minutes, 
+                   e.id as event_id, e.title, e.description, e.organizer_id, e.selection_type
+            FROM dbo.participants p
             JOIN dbo.users u ON p.user_id = u.id
             JOIN dbo.time_slots ts ON p.time_slot_multiple_id = ts.id
             JOIN dbo.events e ON ts.event_id = e.id
@@ -122,7 +123,10 @@ class RepositoryParticipantJdbi(
         handle
             .createQuery(
                 """
-            SELECT p.*, u.*, ts.*, e.* FROM dbo.participants p
+            SELECT p.id, u.id as user_id, u.name, u.email, u.password_validation,
+                   ts.id as time_slot_id, ts.start_time, ts.duration_in_minutes, 
+                   e.id as event_id, e.title, e.description, e.organizer_id, e.selection_type
+            FROM dbo.participants p
             JOIN dbo.users u ON p.user_id = u.id
             JOIN dbo.time_slots ts ON p.time_slot_multiple_id = ts.id
             JOIN dbo.events e ON ts.event_id = e.id
@@ -152,7 +156,7 @@ class RepositoryParticipantJdbi(
             )
         val timeSlot =
             TimeSlotMultiple(
-                id = rs.getInt("time_slot_multiple_id"),
+                id = rs.getInt("time_slot_id"),
                 startTime = rs.getTimestamp("start_time").toLocalDateTime(),
                 durationInMinutes = rs.getInt("duration_in_minutes"),
                 event = event,

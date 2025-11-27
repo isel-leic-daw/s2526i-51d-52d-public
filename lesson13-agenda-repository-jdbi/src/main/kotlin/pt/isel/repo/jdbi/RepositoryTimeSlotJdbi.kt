@@ -99,9 +99,10 @@ class RepositoryTimeSlotJdbi(
                 .createQuery(
                     """
                 SELECT ts.id as time_slot_id, ts.start_time, ts.duration_in_minutes, ts.event_id, 
-                       tss.owner_id, u.id as owner_user_id, u.name as owner_name, u.email as owner_email
+                       tss.owner_id, u.id as owner_user_id, u.name as owner_name, u.email as owner_email,
+                       u.password_validation as password_validation
                 FROM dbo.time_slots ts
-                LEFT JOIN dbo.time_slot_singles tss ON ts.id = tss.time_slot_id
+                INNER JOIN dbo.time_slot_singles tss ON ts.id = tss.time_slot_id
                 LEFT JOIN dbo.users u ON tss.owner_id = u.id
                 WHERE ts.event_id = :eventId
                 """,
@@ -117,8 +118,8 @@ class RepositoryTimeSlotJdbi(
                 .createQuery(
                     """
                 SELECT ts.id as time_slot_id, ts.start_time, ts.duration_in_minutes, ts.event_id
-                FROM dbo.time_slot_multiples tsm
-                LEFT JOIN dbo.time_slots ts ON ts.id = tsm.time_slot_id
+                FROM dbo.time_slots ts
+                INNER JOIN dbo.time_slot_multiples tsm ON ts.id = tsm.time_slot_id
                 WHERE ts.event_id = :eventId
                 """,
                 ).bind("eventId", event.id)
