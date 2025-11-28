@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const user = userState.type === "loaded" ? userState.payload : null;
-  const isLoading = userState.type === "begin" || userState.type === "loading";
+  const isLoading = userState.type === "loading";
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, isLoading }}>
