@@ -1,0 +1,39 @@
+services:
+  # Just a machine running ubuntu, with 'dig' installed so that we can observe the docker compose environment.
+  ubuntu:
+    container_name: ubuntu
+    image: agenda-ubuntu
+    tty: true
+
+  # Once on Exec run: psql -U dbuser -d db
+  agenda-postgres:
+    container_name: agenda-postgres
+    image: agenda-postgres
+    environment:
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=changeit
+      - POSTGRES_DB=db
+    ports:
+      - 5432:5432
+
+  agenda-jvm:
+    container_name: agenda-jvm
+    hostname: agenda-jvm
+    image: agenda-jvm
+    environment:
+      PORT: 8080
+      DB_URL: "jdbc:postgresql://agenda-postgres:5432/db?user=dbuser&password=changeit"
+    ports:
+      - 8080:8080
+    depends_on:
+      - agenda-postgres
+
+  nginx:
+    container_name: agenda-nginx
+    build:
+      context: ..
+      dockerfile: lesson41-nginx/Dockerfile-nginx
+    ports:
+      - 3000:3000
+    depends_on:
+      - agenda-jvm
