@@ -1,4 +1,4 @@
-FROM openjdk:21
+FROM eclipse-temurin:21
 ARG DEPENDENCY=build/dependency
 # first layer with the external libs (i.e. the files that change the least).
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
