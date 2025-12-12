@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useCallback, useEffect, useReducer } from "react";
 import { useParams } from "react-router";
 import { api, ApiError } from "../api";
 import {
@@ -218,15 +218,7 @@ export function EventDetails() {
   const { eventId } = useParams<{ eventId: string }>();
   const [state, dispatch] = useReducer(reducer, initialState);
   const { user } = useAuth();
-
-  // Load event data
-  useEffect(() => {
-    if (!eventId) return;
-    loadEventData(eventId, dispatch);
-  }, [eventId]);
-
-  // SSE setup
-  useEventListener(eventId, (message: SSEMessage) => {
+  const sseMessaheHandler = useCallback((message: SSEMessage) => {
     const { action, slotId, userId, userName, userEmail, participantId } =
       message.data;
 
@@ -248,7 +240,16 @@ export function EventDetails() {
         });
         break;
     }
-  });
+  }, [eventId])
+
+  // Load event data
+  useEffect(() => {
+    if (!eventId) return;
+    loadEventData(eventId, dispatch);
+  }, [eventId]);
+
+  // SSE setup
+  useEventListener(eventId, sseMessaheHandler);
 
   if (state.isLoading) {
     return <div className="event-details-loading">Loading event...</div>;
