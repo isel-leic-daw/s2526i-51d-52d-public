@@ -16,9 +16,9 @@ services:
     ports:
       - 5432:5432
 
-  agenda-jvm:
-    container_name: agenda-jvm
-    hostname: agenda-jvm
+  agenda-jvm-1:
+    container_name: agenda-jvm-1
+    hostname: agenda-jvm-1
     image: agenda-jvm
     environment:
       PORT: 8080
@@ -28,6 +28,29 @@ services:
     depends_on:
       - agenda-postgres
 
+  agenda-jvm-2:
+    container_name: agenda-jvm-2
+    hostname: agenda-jvm-2
+    image: agenda-jvm
+    environment:
+      PORT: 8081
+      DB_URL: "jdbc:postgresql://agenda-postgres:5432/db?user=dbuser&password=changeit"
+    ports:
+      - 8081:8081
+    depends_on:
+      - agenda-postgres
+
+  # agenda-jvm-dynamic is used to illustrate scenarios with a dynamic number of servers
+  # without static and well know names.
+  # We will use docker compose scaling to create multiple instances of this service
+  # e.g. docker compose up -d --scale agenda-jvm-dynamic=3
+  agenda-jvm-dynamic:
+    image: agenda-jvm
+    environment:
+      PORT: 8088
+      DB_URL: "jdbc:postgresql://agenda-postgres:5432/db?user=dbuser&password=changeit"
+
+
   nginx:
     container_name: agenda-nginx
     build:
@@ -35,5 +58,8 @@ services:
       dockerfile: lesson41-nginx/Dockerfile-nginx
     ports:
       - 3000:3000
+      - 3001:3001
     depends_on:
-      - agenda-jvm
+      - agenda-jvm-1
+      - agenda-jvm-2
+      - agenda-jvm-dynamic
